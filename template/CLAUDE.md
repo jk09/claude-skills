@@ -17,6 +17,7 @@ Fill in for the project; run them before finishing any task.
 - Keep changes local: a change should touch few modules. Break a feature request down to achieve this. If changes repeatedly cannot be mapped to modules, refactor the decomposition.
 - Prefer deep modules: significant functionality behind a simple API. Keep cohesion high and coupling low.
 - At module boundaries that cross a package or process, modules interact only by messages (a function call, a method call or a queued message). Message names and payloads are independent of module internals. The payload uses a separate public model, translated into the module's internal model. Do not add this indirection between closely related code inside one module.
+- Use Command Query Responsibility Separation (CQRS), separating commands which change state from queries which only read data.
 - A feature (see Features) maps to one module or a small set of modules. Record which in the feature's README.
 
 ## Design by Contract
