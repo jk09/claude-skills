@@ -28,7 +28,7 @@ Fill in for the project; run them before finishing any task.
 
 - Run the lint / static analysis command and fix all warnings, iterating until clean.
 - Prefer functional code with immutable data when practical and not harmful to performance. Prefer pure functions; make operations with side effects (handlers, migrations, retries) idempotent.
-- Make state modification explicit, e.g. in a class instance.
+- Make state modification explicit: name mutating methods as verbs and state the mutation in the contract.
 
 ## Testing
 
@@ -42,7 +42,9 @@ Ask the user before:
 
 - changing a public API or contract, a database schema or a dependency;
 - deleting files or data outside the current task;
-- touching secrets, credentials or deployment configuration. Never commit secrets.
+- touching secrets, credentials or deployment configuration.
+
+Never commit secrets. If a rule here conflicts with the active spec, stop and ask.
 
 ## Features
 
@@ -50,15 +52,15 @@ Ask the user before:
 - A feature is non-trivial if it adds user-visible behavior or touches more than one module. Record each non-trivial feature in a feature spec; small or ad-hoc changes need none.
 - One folder per feature under `<features root>/<Feature>/` with its code, a short `README.md` and, if needed, a `CLAUDE.md` for feature-specific rules. Index: [docs/features.md](./docs/features.md).
 - Docs are written by the [`document-feature`](.claude/skills/document-feature/) skill; the Stop hook blocks finishing while feature code or the active spec changed without its docs.
-- Removing a feature means deleting its folder, flags, tests and `docs/features.md` row in the same PR.
+- Removing a feature means deleting its folder, flags, DI registrations, tests and `docs/features.md` row in the same PR. Never edit `docs/features.md` by hand; the `document-feature` skill generates it.
 - Decisions go in `docs/adr/`, append-only: a changed decision gets a new ADR that supersedes the old one.
 - Every feature flag has an owner and a removal date in its feature README. The [`audit-features`](.claude/skills/audit-features/) skill lists overdue flags and sprawl.
 
 ## Workflow
 
-- Non-trivial work (see Features) starts from a spec in [docs/specs/](./docs/specs/). No spec → use the [`spec`](.claude/skills/spec/) skill first.
+- Non-trivial work (see Features) starts from a spec in [docs/specs/](./docs/specs/). No spec → use the [`spec`](.claude/skills/spec/) skill first. A SessionStart hook loads the first `Active` spec into each session; keep one active. Write no implementation code until the spec is approved.
 - Finish every task with the [`ship`](.claude/skills/ship/) skill. Don't commit ad hoc.
-- Commits: [Conventional Commits](https://www.conventionalcommits.org/), scope = feature folder name, `Spec: <spec-id>` line when a spec drove the change. Format in the `ship` skill.
+- Commits: [Conventional Commits](https://www.conventionalcommits.org/), scope = feature folder name in kebab-case (area such as `workflow` or `deps` for cross-cutting changes), `Spec: <spec-id>` line when a spec drove the change. Format in the `ship` skill.
 
 ## Where instructions go
 
