@@ -3,7 +3,7 @@
 <One or two sentences: what this feature does for the user/business.>
 
 ## Entry points
-- `POST /orders` – `CreateOrder.cs`
+- `POST /orders` – `<file implementing the handler>`
 - `OrderPaidHandler` – consumes `PaymentCompleted`
 
 ## Invariants

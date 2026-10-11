@@ -1,0 +1,4 @@
+{
+  "featuresRoot": "src/features",
+  "testPattern": "(?i)(^|/)(tests?|__tests__)/|\\.(test|spec)\\.[^/]+$"
+}

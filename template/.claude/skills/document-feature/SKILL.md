@@ -9,7 +9,7 @@ Keep feature docs in sync with the code. Docs describe the **current** behaviour
 
 ## Conventions
 
-- Feature folder: `src/Api/Features/<Feature>/` (one folder = one feature).
+- Feature folder: `<features root>/<Feature>/` (one folder = one feature). The features root is `featuresRoot` in `.claude/project.json`.
 - Per feature: `README.md` (for humans + agents, ≤ ~30 lines) and optionally `CLAUDE.md` (agent-only rules/gotchas, ≤ ~15 lines).
 - Decisions: `docs/adr/NNNN-<slug>.md`, append-only.
 - Index: `docs/features.md`, one row per feature folder. The root `CLAUDE.md` points here; keep feature rules out of the root `CLAUDE.md`.
@@ -30,13 +30,13 @@ Group changed paths by feature folder. Classify each feature as:
 | **Changed** | Files modified in an existing folder |
 | **Renamed** | `R` entries moving files between feature folders |
 | **Removed** | Folder deleted |
-| **Test/format-only** | Only `*Tests*`, whitespace or formatting changes – skip, say so |
+| **Test/format-only** | Only test files (`testPattern` in `.claude/project.json`), whitespace or formatting changes – skip, say so |
 
 If the user named a specific feature, restrict to it.
 
 ## Step 2 – Read before writing
 
-For each feature to document, read: the existing `README.md` and `CLAUDE.md`, the diff for that folder, the endpoint/handler entry points, DI registration (search `Add<Feature>` / `Map<Feature>`), options classes, and the active spec in `docs/specs/` if one exists (**Status** `Active`; its **Affected features** row lists the folders to cover).
+For each feature to document, read: the existing `README.md` and `CLAUDE.md`, the diff for that folder, the entry points (routes, handlers, jobs, public API), where the feature is wired in or registered, its configuration, and the active spec in `docs/specs/` if one exists (**Status** `Active`; its **Affected features** row lists the folders to cover).
 
 Derive facts from code, not from names or guesses. If something can't be determined (e.g. *why* a rule exists), write `TODO(owner): …` rather than inventing a reason.
 
@@ -54,7 +54,7 @@ Use `templates/feature-readme.md`. Rules:
 
 ## Step 4 – Update the folder CLAUDE.md (only if needed)
 
-Add a line only for a new, non-obvious rule or gotcha an agent would get wrong (e.g. "Refund amounts are in minor units", "Don't call PaymentGateway directly – use IRefundPolicy"). Remove lines the change made obsolete. Don't duplicate the README.
+Add a line only for a new, non-obvious rule or gotcha an agent would get wrong (e.g. "Refund amounts are in minor units", "Don't call the payment gateway directly – go through the refund policy"). Remove lines the change made obsolete. Don't duplicate the README.
 
 ## Step 5 – Decide whether an ADR is needed
 
@@ -69,8 +69,8 @@ Otherwise don't create one. Never set `Accepted` yourself – ask the user.
 
 ## Step 6 – Handle renames and removals
 
-- **Renamed**: move README/CLAUDE.md with the folder, update the index row and any links (`grep -r "<OldName>" docs src`).
-- **Removed**: delete the index row; mark ADRs that only concerned this feature `Obsolete (feature removed in <commit/PR>)`; check that DI registrations, options, flags and tests were removed too – list leftovers to the user.
+- **Renamed**: move README/CLAUDE.md with the folder, update the index row and any links (search the repo for `<OldName>`).
+- **Removed**: delete the index row; mark ADRs that only concerned this feature `Obsolete (feature removed in <commit/PR>)`; check that registrations, configuration, flags and tests were removed too – list leftovers to the user.
 
 ## Step 7 – Regenerate docs/features.md
 
@@ -81,8 +81,8 @@ Rebuild the whole table from the feature folders (don't patch rows), sorted by n
 
 | Feature | Purpose | Flags | Docs |
 |---|---|---|---|
-| Invoicing | Generates and emails monthly invoices. | – | [README](../src/Api/Features/Invoicing/README.md) |
-| Orders | Create, update and refund customer orders. | `PartialRefunds` | [README](../src/Api/Features/Orders/README.md) |
+| Invoicing | Generates and emails monthly invoices. | – | [README](../<features root>/Invoicing/README.md) |
+| Orders | Create, update and refund customer orders. | `PartialRefunds` | [README](../<features root>/Orders/README.md) |
 ```
 
 Purpose = the README's first sentence. Features without a README get `⚠ undocumented`.

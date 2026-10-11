@@ -8,8 +8,9 @@ $ErrorActionPreference = 'SilentlyContinue'
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $root          = if ($env:CLAUDE_PROJECT_DIR) { $env:CLAUDE_PROJECT_DIR } else { (Get-Location).Path }
-$featuresRoot  = 'src/Api/Features'
-$testPattern   = '(?i)(^|/)(tests?|__tests__)/|\.(test|spec)\.[^/]+$|tests?\.cs$'
+$config        = Get-Content (Join-Path $root '.claude/project.json') -Raw | ConvertFrom-Json
+$featuresRoot  = $config.featuresRoot.Trim('/')
+$testPattern   = $config.testPattern
 $activePattern = '^(\|\s*\*\*Status\*\*\s*\|\s*Active\b|status:\s*active\s*$)'
 
 if (-not $Base -and [Console]::IsInputRedirected) {
