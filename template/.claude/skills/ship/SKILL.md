@@ -20,3 +20,7 @@ description: Finish a task – verify, update spec and docs, write the commit. U
    - `Spec:` line whenever an active spec drove the change.
 
 5. Create the PR and link to the spec. Inform the user about the PR and ask for review. If the PR is merged, set **Status** to `Done` in the spec.
+6. Always watch the PR until it is merged or closed: subscribe to its activity (in Claude Code on the web: `subscribe_pr_activity`), without asking. On every event:
+   - Fix review comments and push the fixes. Reply on each thread, and resolve the ones you fixed. Bring large or design-level asks to the user before changing code.
+   - Fix CI failures and merge conflicts and push the fix. Run the step 1 checks before every push.
+   - If the user says stop, unsubscribe and stop pushing to the PR.

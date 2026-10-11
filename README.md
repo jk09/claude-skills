@@ -4,7 +4,7 @@ A reusable Claude Code setup that keeps agent work spec-driven and documented, a
 
 **spec → implement → ship**, with feature docs kept in sync with the code.
 
-Source: [`jk09/browse-ledger@2e1c30c`](https://github.com/jk09/browse-ledger/tree/2e1c30cd86f62c060e77607d54b83d15fc425661). The files in `template/` are byte-identical to that commit.
+Source: [`jk09/browse-ledger@2e1c30c`](https://github.com/jk09/browse-ledger/tree/2e1c30cd86f62c060e77607d54b83d15fc425661). The files in `template/` match that commit, except that the `ship` skill has an added step 6: watch the PR and handle review comments, CI failures and merge conflicts.
 
 ## What's inside
 
@@ -18,7 +18,7 @@ template/
 │   │   └── check-done.ps1                      # Stop: blocks "done" while docs/spec lag the code
 │   └── skills/
 │       ├── spec/SKILL.md                       # write a spec, get approval, set it Active
-│       ├── ship/SKILL.md                       # verify, tick acceptance criteria, update docs, commit, PR
+│       ├── ship/SKILL.md                       # verify, tick acceptance criteria, update docs, commit, PR, watch the PR
 │       ├── document-feature/
 │       │   ├── SKILL.md                        # feature README / CLAUDE.md / ADR / index upkeep
 │       │   └── templates/{feature-readme,adr}.md
@@ -34,7 +34,7 @@ template/
 |---|---|
 | `spec` skill + spec template, one `Active` spec at a time | Starting non-trivial work with no agreed scope or testable acceptance criteria |
 | SessionStart hook (`active-spec.ps1`) | New sessions losing track of the current spec |
-| `ship` skill | Ad hoc commits, unticked acceptance criteria, inconsistent commit messages |
+| `ship` skill | Ad hoc commits, unticked acceptance criteria, inconsistent commit messages, PRs left with unanswered review comments or red CI |
 | Stop hook (`check-done.ps1`) | Finishing while feature code changed without its README, a removed feature is still listed in `docs/features.md`, or the active spec wasn't updated |
 | `document-feature` skill | Doc drift. READMEs are capped at ~30 lines, so an oversized feature shows up as sprawl |
 | One folder per feature, `docs/features.md` index, flag owner and removal date | Features and flags nobody can find, own or remove |
